@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Cart</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        nav ul li {
+            display: inline;
+            margin: 0 10px;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        nav ul li a:hover {
+            text-decoration: underline;
+        }
+
+        h1 {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        main {
+            padding: 20px;
+        }
+
+        .cart-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .cart-item {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin: 10px;
+            padding: 20px;
+            width: 200px;
+            text-align: center;
+        }
+
+        button {
+            background-color: #333;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+
+        .quantity-buttons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .quantity-buttons button {
+            margin: 0 5px;
+        }
+
+        .order-button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .order-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <nav>
+        <ul>
+            <li><a href="/products">Products</a></li>
+            <li><a href="/cart">Cart</a></li>
+        </ul>
+    </nav>
+</header>
+<main>
+    <h1>Cart</h1>
+    <div class="cart-list">
+        <div class="cart-item" th:each="item : ${cart.items}">
+            <h2 th:text="${item.product.name}"></h2>
+            <p><strong>Price: </strong><span th:text="${item.product.price} + ' грн'"></span></p>
+            <div class="quantity-buttons">
+                <form th:action="@{/cart/decrease/{id}(id=${item.product.id})}" method="post">
+                    <button type="submit">-</button>
+                </form>
+                <p th:text="${item.quantity}"></p>
+                <form th:action="@{/cart/increase/{id}(id=${item.product.id})}" method="post">
+                    <button type="submit">+</button>
+                </form>
+            </div>
+            <form th:action="@{/cart/remove/{id}(id=${item.product.id})}" method="post">
+                <button type="submit">Remove</button>
+            </form>
+        </div>
+    </div>
+    <div>
+        <button class="order-button">Order Now</button>
+    </div>
+</main>
+</body>
+</html>
