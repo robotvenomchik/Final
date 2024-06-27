@@ -1,5 +1,6 @@
 package org.example.shop.controller;
 
+import jakarta.servlet.http.HttpSession;
 import org.example.shop.model.Cart;
 import org.example.shop.model.CartItem;
 import org.example.shop.model.Product;
@@ -8,14 +9,13 @@ import org.example.shop.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Optional;
 
 @Controller
+@RequestMapping("/cart")
 public class CartController {
 
     @Autowired
@@ -24,19 +24,27 @@ public class CartController {
     @Autowired
     private ProductRepository productRepository;
 
-    @GetMapping("/cart")
-    public String viewCart(Model model) {
-        Cart cart = cartRepository.findById(1L).orElse(new Cart());
+    @GetMapping
+    public String viewCart(Model model, HttpSession session) {
+        String sessionId = session.getId();
+        Cart cart = cartRepository.findBySessionId(sessionId).orElseGet(() -> {
+            Cart newCart = new Cart();
+            newCart.setSessionId(sessionId);
+            return newCart;
+        });
         model.addAttribute("cart", cart);
         return "cart";
     }
 
-    @PostMapping("/cart/add/{productId}")
-    public String addToCart(@PathVariable Long productId) {
-        Cart cart = cartRepository.findById(1L).orElse(new Cart());
-        if (cart.getItems() == null) {
-            cart.setItems(new ArrayList<>());
-        }
+    @PostMapping("/add/{productId}")
+    @ResponseBody
+    public String addToCart(@PathVariable Long productId, HttpSession session) {
+        String sessionId = session.getId();
+        Cart cart = cartRepository.findBySessionId(sessionId).orElseGet(() -> {
+            Cart newCart = new Cart();
+            newCart.setSessionId(sessionId);
+            return newCart;
+        });
 
         Optional<Product> productOpt = productRepository.findById(productId);
         if (productOpt.isPresent()) {
@@ -62,23 +70,39 @@ public class CartController {
             cartRepository.save(cart);
         }
 
-        return "redirect:/cart";
+        return "Item added to cart";
     }
 
-    @PostMapping("/cart/remove/{productId}")
-    public String removeFromCart(@PathVariable Long productId) {
-        Cart cart = cartRepository.findById(1L).orElse(new Cart());
-        if (cart.getItems() != null) {
+    @PostMapping("/remove/{productId}")
+    @ResponseBody
+    public String removeFromCart(@PathVariable Long productId, HttpSession session) {
+        String sessionId = session.getId();
+        Cart cart = cartRepository.findBySessionId(sessionId).orElse(null);
+        if (cart != null && cart.getItems() != null) {
             cart.getItems().removeIf(item -> item.getProduct().getId().equals(productId));
             cartRepository.save(cart);
         }
-        return "redirect:/cart";
+        return "Item removed from cart";
     }
 
-    @PostMapping("/cart/increase/{productId}")
-    public String increaseQuantity(@PathVariable Long productId) {
-        Cart cart = cartRepository.findById(1L).orElse(new Cart());
-        if (cart.getItems() != null) {
+    @PostMapping("/clear")
+    @ResponseBody
+    public String clearCart(HttpSession session) {
+        String sessionId = session.getId();
+        Cart cart = cartRepository.findBySessionId(sessionId).orElse(null);
+        if (cart != null) {
+            cart.getItems().clear();
+            cartRepository.save(cart);
+        }
+        return "Cart cleared";
+    }
+
+    @PostMapping("/increase/{productId}")
+    @ResponseBody
+    public String increaseQuantity(@PathVariable Long productId, HttpSession session) {
+        String sessionId = session.getId();
+        Cart cart = cartRepository.findBySessionId(sessionId).orElse(null);
+        if (cart != null && cart.getItems() != null) {
             for (CartItem item : cart.getItems()) {
                 if (item.getProduct().getId().equals(productId)) {
                     item.setQuantity(item.getQuantity() + 1);
@@ -87,13 +111,15 @@ public class CartController {
             }
             cartRepository.save(cart);
         }
-        return "redirect:/cart";
+        return "Quantity increased";
     }
 
-    @PostMapping("/cart/decrease/{productId}")
-    public String decreaseQuantity(@PathVariable Long productId) {
-        Cart cart = cartRepository.findById(1L).orElse(new Cart());
-        if (cart.getItems() != null) {
+    @PostMapping("/decrease/{productId}")
+    @ResponseBody
+    public String decreaseQuantity(@PathVariable Long productId, HttpSession session) {
+        String sessionId = session.getId();
+        Cart cart = cartRepository.findBySessionId(sessionId).orElse(null);
+        if (cart != null && cart.getItems() != null) {
             for (CartItem item : cart.getItems()) {
                 if (item.getProduct().getId().equals(productId)) {
                     if (item.getQuantity() > 1) {
@@ -106,6 +132,6 @@ public class CartController {
             }
             cartRepository.save(cart);
         }
-        return "redirect:/cart";
+        return "Quantity decreased";
     }
 }

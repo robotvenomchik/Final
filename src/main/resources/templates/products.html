@@ -95,11 +95,23 @@
             text-decoration: underline;
         }
     </style>
+    <script>
+        function addToCart(productId) {
+            fetch(`/cart/add/${productId}`, {
+                method: 'POST'
+            }).then(response => {
+                if (response.ok) {
+                    alert('Item added to cart');
+                }
+            });
+        }
+    </script>
 </head>
 <body>
 <header>
     <nav>
         <ul>
+            <li><a href="/">Home</a></li>
             <li><a href="/products">Products</a></li>
             <li><a href="/cart">Cart</a></li>
         </ul>
@@ -113,9 +125,7 @@
             <h2 th:text="${product.name}"></h2>
             <p th:text="${product.description}"></p>
             <p><strong>Price: </strong><span th:text="${product.price} + ' грн'"></span></p>
-            <form th:action="@{/cart/add/{id}(id=${product.id})}" method="post">
-                <button type="submit">Add to cart</button>
-            </form>
+            <button type="button" th:onclick="'addToCart(' + ${product.id} + ')'">Add to cart</button>
         </div>
     </div>
 </main>
