@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpSession;
 import org.example.shop.model.Cart;
 import org.example.shop.model.CartItem;
 import org.example.shop.model.Product;
+import org.example.shop.model.User;
 import org.example.shop.repository.CartRepository;
 import org.example.shop.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.Optional;
 
 @Controller
@@ -39,6 +39,11 @@ public class CartController {
     @PostMapping("/add/{productId}")
     @ResponseBody
     public String addToCart(@PathVariable Long productId, HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        if (user == null) {
+            return "redirect:/login";
+        }
+
         String sessionId = session.getId();
         Cart cart = cartRepository.findBySessionId(sessionId).orElseGet(() -> {
             Cart newCart = new Cart();
@@ -76,6 +81,11 @@ public class CartController {
     @PostMapping("/remove/{productId}")
     @ResponseBody
     public String removeFromCart(@PathVariable Long productId, HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        if (user == null) {
+            return "redirect:/login";
+        }
+
         String sessionId = session.getId();
         Cart cart = cartRepository.findBySessionId(sessionId).orElse(null);
         if (cart != null && cart.getItems() != null) {
@@ -88,6 +98,11 @@ public class CartController {
     @PostMapping("/clear")
     @ResponseBody
     public String clearCart(HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        if (user == null) {
+            return "redirect:/login";
+        }
+
         String sessionId = session.getId();
         Cart cart = cartRepository.findBySessionId(sessionId).orElse(null);
         if (cart != null) {
@@ -100,6 +115,11 @@ public class CartController {
     @PostMapping("/increase/{productId}")
     @ResponseBody
     public String increaseQuantity(@PathVariable Long productId, HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        if (user == null) {
+            return "redirect:/login";
+        }
+
         String sessionId = session.getId();
         Cart cart = cartRepository.findBySessionId(sessionId).orElse(null);
         if (cart != null && cart.getItems() != null) {
@@ -117,6 +137,11 @@ public class CartController {
     @PostMapping("/decrease/{productId}")
     @ResponseBody
     public String decreaseQuantity(@PathVariable Long productId, HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        if (user == null) {
+            return "redirect:/login";
+        }
+
         String sessionId = session.getId();
         Cart cart = cartRepository.findBySessionId(sessionId).orElse(null);
         if (cart != null && cart.getItems() != null) {
@@ -133,5 +158,17 @@ public class CartController {
             cartRepository.save(cart);
         }
         return "Quantity decreased";
+    }
+
+    @PostMapping("/checkout")
+    @ResponseBody
+    public String checkout(HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        if (user == null) {
+            return "redirect:/login";
+        }
+
+        // логіка для оформлення замовлення
+        return "Order placed";
     }
 }
