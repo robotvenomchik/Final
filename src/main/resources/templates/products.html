@@ -60,21 +60,22 @@
         }
 
         .product-list {
-          display: flex;
-          flex-wrap: wrap;
-          justify-content: center;
-          gap: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
         }
 
         .product-item {
-          background-color: #fff;
-          border: 1px solid #ddd;
-          border-radius: 5px;
-          padding: 20px;
-          text-align: center;
-          box-sizing: border-box;
-          width: 23%; /* Default to 4 items per row */
-          margin: 1%;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            text-align: center;
+            box-sizing: border-box;
+            flex: 1 1 calc(25% - 40px); /* Default to 4 items per row */
+            max-width: calc(25% - 40px); /* Default to 4 items per row */
+            margin: 10px;
         }
 
         .product-item img {
@@ -107,33 +108,25 @@
         }
 
         /* Responsive Design */
-       /* Responsive Design */
-        @media (min-width: 1200px) {
-          .product-item {
-            width: 18%; /* 5 items per row */
-            margin: 1%;
-          }
-        }
-
-        @media (min-width: 900px) and (max-width: 1199px) {
-          .product-item {
-            width: 23%; /* 4 items per row */
-            margin: 1%;
-          }
+        @media (max-width: 1200px) {
+            .product-item {
+                flex: 1 1 calc(33.333% - 40px); /* 3 items per row */
+                max-width: calc(33.333% - 40px);
+            }
         }
 
         @media (max-width: 900px) {
-          .product-item {
-            width: 30%; /* 3 items per row */
-            margin: 1.5%;
-          }
+            .product-item {
+                flex: 1 1 calc(45% - 40px); /* 2 items per row */
+                max-width: calc(45% - 40px);
+            }
         }
 
         @media (max-width: 600px) {
-          .product-item {
-            width: 45%; /* 2 items per row */
-            margin: 2.5%;
-          }
+            .product-item {
+                flex: 1 1 calc(90% - 40px); /* 1 item per row */
+                max-width: calc(90% - 40px);
+            }
         }
     </style>
 </head>

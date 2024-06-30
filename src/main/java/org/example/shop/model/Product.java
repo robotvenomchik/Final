@@ -18,8 +18,10 @@ public class Product {
     private String imageUrl;
     private String type;
     private String season;
+
     @ElementCollection
     private List<String> size;
+
     private String type2;
 
     public Product() {
@@ -36,7 +38,6 @@ public class Product {
         this.type2 = type2;
     }
 
-    // getters and setters
 
     public Long getId() {
         return id;

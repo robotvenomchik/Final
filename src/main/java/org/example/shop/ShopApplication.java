@@ -31,7 +31,7 @@ public class ShopApplication implements CommandLineRunner {
         productRepository.save(new Product("туфлі", "Стильні туфлі", 350, "images/shoes.jpg", "man", "summer",  new ArrayList<String>(Arrays.asList("XS","S","M","XL","XXL")), "shoes"));
         productRepository.save(new Product("костюм", "Костюм Джеймса Бонда", 200, "images/siut.jpg", "man", "summer",  new ArrayList<String>(Arrays.asList("S","M","L")), "costume"));
         productRepository.save(new Product("куртка", "куртка Джо Байдена", 450, "images/coat1.jpg", "man", "winter",  new ArrayList<String>(Arrays.asList("S","L")), "coat"));
-        productRepository.save(new Product("туфлі жіночі", "круті туфлі", 670, "images/shoes1.jpg", "woman", "summer",  new ArrayList<String>(Arrays.asList("XS","S","M","XL","XXL")), "shoes"));
+        productRepository.save(new Product("туфwлі жіночі", "круті туфлі", 670, "images/shoes1.jpg", "woman", "summer",  new ArrayList<String>(Arrays.asList("XS","S","M","XL","XXL")), "shoes"));
         productRepository.save(new Product("туфлі жічночі", "туфлі кращі", 340, "images/shoes2.jpg", "woman", "summer",  new ArrayList<String>(Arrays.asList("XS","S","L")), "shoes"));
         productRepository.save(new Product("жіночий піджак", "крутий піджак для зустрічей", 450, "images/coat2.jpg", "woman", "winter",  new ArrayList<String>(Arrays.asList("XS","S","M")), "coat"));
         productRepository.save(new Product("пальто жіноче", "пальто Лесі Нікітюк", 520, "images/shoes2.jpg", "woman", "winter",  new ArrayList<String>(Arrays.asList("XS","S","L")), "coat"));

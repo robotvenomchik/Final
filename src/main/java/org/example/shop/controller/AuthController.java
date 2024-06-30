@@ -31,10 +31,12 @@ public class AuthController {
 
     @PostMapping("/register")
     public String registerUser(@RequestParam("username") String username,
-                               @RequestParam("password") String password) {
+                               @RequestParam("password") String password,
+                               @RequestParam("number") String number) {
         User user = new User();
         user.setUsername(username);
         user.setPassword(passwordEncoder.encode(password));
+        user.setNumber(number);
         userRepository.save(user);
         return "redirect:/login";
     }
