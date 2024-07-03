@@ -8,10 +8,16 @@ import org.example.shop.model.User;
 import org.example.shop.repository.CartRepository;
 import org.example.shop.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.client.RestTemplate;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import java.util.Optional;
 
 @Controller
@@ -171,4 +177,44 @@ public class CartController {
         // логіка для оформлення замовлення
         return "Order placed";
     }
+    @Value("${telegram.bot.token}")
+    private String telegramBotToken;
+
+    @Value("${telegram.chat.id}")
+    private String telegramChatId;
+
+    @PostMapping("/order")
+    @ResponseBody
+    public String orderCart(HttpSession session) {
+        String sessionId = session.getId();
+        Cart cart = cartRepository.findBySessionId(sessionId).orElse(null);
+        if (cart != null && !cart.getItems().isEmpty()) {
+            StringBuilder orderMessage = new StringBuilder("New order:\n");
+            for (CartItem item : cart.getItems()) {
+                orderMessage.append("Product: ").append(item.getProduct().getName())
+                        .append(", Quantity: ").append(item.getQuantity())
+                        .append(", Price: ").append(item.getProduct().getPrice()).append(" грн\n");
+            }
+
+            String url = "https://api.telegram.org/bot" + telegramBotToken + "/sendMessage";
+            String requestBody = String.format("{\"chat_id\":\"%s\", \"text\":\"%s\"}", telegramChatId, orderMessage.toString());
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            HttpEntity<String> entity = new HttpEntity<>(requestBody, headers);
+
+            RestTemplate restTemplate = new RestTemplate();
+            restTemplate.postForObject(url, entity, String.class);
+
+            cart.getItems().clear();
+            cartRepository.save(cart);
+
+            return "Order placed";
+        }
+        return "Cart is empty";
+    }
 }
+/*ст 97 кольоровий
+сірий 53 54 55
+
+4O останіх слів*/

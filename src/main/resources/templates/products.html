@@ -4,130 +4,125 @@
     <meta charset="UTF-8">
     <title>Products</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
+        /* Загальні стилі */
+      body {
+          font-family: Arial, sans-serif;
+          margin: 0;
+          padding: 0;
+          background-color: #f9f9f9;
+      }
 
-        header {
-            background-color: #333;
-            color: #fff;
-            padding: 10px 0;
-            text-align: center;
-        }
+      /* Стилі для header */
+      header {
+          background-color: #333;
+          color: white;
+          padding: 10px 0;
+      }
 
-        nav ul {
-            list-style: none;
-            padding: 0;
-        }
+      header nav ul {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+          display: flex;
+          justify-content: center;
+      }
 
-        nav ul li {
-            display: inline;
-            margin: 0 10px;
-        }
+      header nav ul li {
+          margin: 0 15px;
+      }
 
-        nav ul li a {
-            color: #fff;
-            text-decoration: none;
-            font-weight: bold;
-        }
+      header nav ul li a {
+          color: white;
+          text-decoration: none;
+          font-size: 18px;
+      }
 
-        nav ul li a:hover {
-            text-decoration: underline;
-        }
+      header nav ul li a:hover {
+          text-decoration: underline;
+      }
 
-        h1 {
-            background-color: #333;
-            color: #fff;
-            padding: 20px;
-            text-align: center;
-        }
+      /* Стилі для main */
+      main {
+          max-width: 1200px;
+          margin: 20px auto;
+          padding: 20px;
+          background-color: white;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
 
-        main {
-            padding: 20px;
-        }
+      h1 {
+          text-align: center;
+          margin-bottom: 20px;
+      }
 
-        .filters {
-            text-align: center;
-            margin-bottom: 20px;
-        }
+      /* Стилі для фільтрів */
+      .filters {
+          display: flex;
+          justify-content: center;
+          margin-bottom: 20px;
+      }
 
-        .filters form {
-            display: inline-block;
-            text-align: left;
-        }
+      .filters form {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+      }
 
-        .product-list {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 20px;
-        }
+      .filters label {
+          margin-right: 15px;
+          font-size: 16px;
+      }
 
-        .product-item {
-            background-color: #fff;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 20px;
-            text-align: center;
-            box-sizing: border-box;
-            flex: 1 1 calc(25% - 40px); /* Default to 4 items per row */
-            max-width: calc(25% - 40px); /* Default to 4 items per row */
-            margin: 10px;
-        }
+      .filters button {
+          margin-left: 15px;
+          padding: 5px 10px;
+          font-size: 16px;
+          cursor: pointer;
+      }
 
-        .product-item img {
-            max-width: 100%;
-            height: auto;
-        }
+      /* Стилі для списку продуктів */
+      .product-list {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: space-around;
+      }
 
-        button {
-            background-color: #333;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
+      .product-item {
+          background-color: #f1f1f1;
+          margin: 10px;
+          padding: 15px;
+          width: 280px;
+          box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+          text-align: center;
+      }
 
-        button:hover {
-            background-color: #555;
-        }
+      .product-item img {
+          width: 100%;
+          height: auto;
+      }
 
-        a {
-            display: inline-block;
-            margin: 20px 0;
-            text-decoration: none;
-            color: #333;
-        }
+      .product-item h2 {
+          font-size: 20px;
+          margin: 10px 0;
+      }
 
-        a:hover {
-            text-decoration: underline;
-        }
+      .product-item p {
+          margin: 10px 0;
+      }
 
-        /* Responsive Design */
-        @media (max-width: 1200px) {
-            .product-item {
-                flex: 1 1 calc(33.333% - 40px); /* 3 items per row */
-                max-width: calc(33.333% - 40px);
-            }
-        }
+      .product-item form button {
+          padding: 10px 15px;
+          font-size: 16px;
+          cursor: pointer;
+          background-color: #333;
+          color: white;
+          border: none;
+          border-radius: 5px;
+      }
 
-        @media (max-width: 900px) {
-            .product-item {
-                flex: 1 1 calc(45% - 40px); /* 2 items per row */
-                max-width: calc(45% - 40px);
-            }
-        }
-
-        @media (max-width: 600px) {
-            .product-item {
-                flex: 1 1 calc(90% - 40px); /* 1 item per row */
-                max-width: calc(90% - 40px);
-            }
-        }
+      .product-item form button:hover {
+          background-color: #555;
+      }
     </style>
 </head>
 <body>
