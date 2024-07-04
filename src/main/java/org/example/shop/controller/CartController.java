@@ -186,10 +186,16 @@ public class CartController {
     @PostMapping("/order")
     @ResponseBody
     public String orderCart(HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        if (user == null) {
+            return "redirect:/login";
+        }
+
         String sessionId = session.getId();
         Cart cart = cartRepository.findBySessionId(sessionId).orElse(null);
         if (cart != null && !cart.getItems().isEmpty()) {
             StringBuilder orderMessage = new StringBuilder("New order:\n");
+            orderMessage.append("Phone: ").append(user.getNumber()).append("\n");
             for (CartItem item : cart.getItems()) {
                 orderMessage.append("Product: ").append(item.getProduct().getName())
                         .append(", Quantity: ").append(item.getQuantity())
@@ -197,7 +203,7 @@ public class CartController {
             }
 
             String url = "https://api.telegram.org/bot" + telegramBotToken + "/sendMessage";
-            String requestBody = String.format("{\"chat_id\":\"%s\", \"text\":\"%s\"}", telegramChatId, orderMessage.toString());
+            String requestBody = String.format("{\"chat_id\":\"%s\", \"text\":\"%s\"}", telegramChatId, orderMessage.toString().replace("\"", "\\\""));
 
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
@@ -206,7 +212,7 @@ public class CartController {
             RestTemplate restTemplate = new RestTemplate();
             restTemplate.postForObject(url, entity, String.class);
 
-            cart.getItems().clear();
+            cart.getItems().clear(); // Очищаємо кошик після замовлення
             cartRepository.save(cart);
 
             return "Order placed";
